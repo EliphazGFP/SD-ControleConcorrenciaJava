@@ -40,29 +40,18 @@ Foram implementadas e comparadas 4 versões:
 ---
 
 ## Principais Correções Realizadas
-Durante a atividade foram encontrados e corrigidos diversos erros clássicos:
-- Falta de tratamento de `InterruptedException`
 - Imports ausentes (`java.util.concurrent.locks.*`)
-- `unlock()` fora do bloco `finally` (risco de deadlock)
-- Uso incorreto de `readLock()` / `writeLock()`
 - Classes duplicadas em arquivos diferentes
 - Métodos soltos fora de classes
 - Chaves `{ }` faltando ou sobrando
 - Construtores com nome errado
-- Remoção de arquivos duplicados (`Conta.java`, `Banco.java`, `Cliente.java`)
+- Remoção de arquivos duplicados
 
-**Resultado final:** todos os códigos compilam com `javac */*.java` sem nenhum erro ou warning.
+**Resultado final:** todos os códigos compilam sem nenhum erro
 
 ---
 
 ## Conclusões
 1. **Sem sincronização** → ocorre **race condition** → o saldo final é imprevisível e quase sempre incorreto.
 2. O uso de **`synchronized`** é a solução mais simples e suficiente para este caso.
-3. **`ReentrantLock`** oferece maior flexibilidade (fairness, tryLock, etc.), mas exige disciplina rigorosa com `try/finally`.
-4. **`ReadWriteLock`** é ideal quando há muitas leituras e poucas escritas (permite múltiplas threads lendo simultaneamente). Neste exemplo específico o ganho é pequeno, mas o mecanismo funcionou perfeitamente.
-
-**Nenhum deadlock ocorreu** porque o recurso crítico é sempre adquirido na mesma ordem e por tempo curto.
-
----
-
-## Estrutura Final do Repositório
+3. **`ReentrantLock`** oferece maior flexibilidade, mas exige disciplina rigorosa com `try/finally`.
