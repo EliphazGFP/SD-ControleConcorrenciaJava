@@ -4,48 +4,36 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Familia {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Conta conta = new Conta(1000.0);
 
         Thread pai = new Thread(new Pai(conta), "Pai");
-        Thread filho1 = new Thread(new Filho(conta), "Filho1");
-        Thread filho2 = new Thread(new Filho(conta), "Filho2");
-        Thread filho3 = new Thread(new Filho(conta), "Filho3");
-        Thread filho4 = new Thread(new Filho(conta), "Filho4");
+        Thread f1 = new Thread(new Filho(conta), "Filho-1");
+        Thread f2 = new Thread(new Filho(conta), "Filho-2");
+        Thread f3 = new Thread(new Filho(conta), "Filho-3");
+        Thread f4 = new Thread(new Filho(conta), "Filho-4");
 
-        pai.start();
-        filho1.start();
-        filho2.start();
-        filho3.start();
-        filho4.start();
+        pai.start(); f1.start(); f2.start(); f3.start(); f4.start();
+        pai.join(); f1.join(); f2.join(); f3.join(); f4.join();
 
-        try {
-            pai.join();
-            filho1.join();
-            filho2.join();
-            filho3.join();
-            filho4.join();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-
-        System.out.println("Saldo final: " + conta.getSaldo());
+        System.out.println("Saldo final (ReentrantLock): " + conta.getSaldo());
     }
 }
 
 class Conta {
     private double saldo;
-    private Lock lock = new ReentrantLock();
+    private final Lock lock = new ReentrantLock();
 
     public Conta(double saldoInicial) {
         this.saldo = saldoInicial;
+        System.out.println("Conta criada. Saldo inicial: R$ " + saldo);
     }
 
     public void depositar(double valor) {
         lock.lock();
         try {
             saldo += valor;
-            System.out.println(Thread.currentThread().getName() + " depositou " + valor + ". Saldo: " + saldo);
+            System.out.println(Thread.currentThread().getName() + " depositou " + valor + " → saldo: " + saldo);
         } finally {
             lock.unlock();
         }
@@ -55,15 +43,9 @@ class Conta {
         lock.lock();
         try {
             if (saldo >= valor) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+                try { Thread.sleep(100); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
                 saldo -= valor;
-                System.out.println(Thread.currentThread().getName() + " sacou " + valor + ". Saldo: " + saldo);
-            } else {
-                System.out.println(Thread.currentThread().getName() + " não pôde sacar " + valor + ". Saldo insuficiente: " + saldo);
+                System.out.println(Thread.currentThread().getName() + " sacou " + valor + " → saldo: " + saldo);
             }
         } finally {
             lock.unlock();
@@ -72,50 +54,10 @@ class Conta {
 
     public double getSaldo() {
         lock.lock();
-        try {
-            return saldo;
-        } finally {
-            lock.unlock();
-        }
+        try { return saldo; }
+        finally { lock.unlock(); }
     }
 }
 
-class Pai implements Runnable {
-    private Conta conta;
-
-    public Pai(Conta conta) {
-        this.conta = conta;
-    }
-
-    @Override
-    public void run() {
-        for (int i = 0; i < 5; i++) {
-            conta.depositar(200.0);
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-    }
-}
-
-class Filho implements Runnable {
-    private Conta conta;
-
-    public Filho(Conta conta) {
-        this.conta = conta;
-    }
-
-    @Override
-    public void run() {
-        for (int i = 0; i < 5; i++) {
-            conta.sacar(200.0);
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-    }
-}
+class Pai implements Runnable { private Conta c; public Pai(Conta c) { this.c = c; } public void run() { for (int i=0;i<5;i++) { c.depositar(200); try {Thread.sleep(50);} catch (InterruptedException e) {Thread.currentThread().interrupt();} } } }
+class Filho implements Runnable { private Conta c; public Filho(Conta c) { this.c = c; } public void run() { for (int i=0;i<5;i++) { c.sacar(200); try {Thread.sleep(50);} catch (InterruptedException e) {Thread.currentThread().interrupt();} } } }

@@ -1,0 +1,235 @@
+=== 1. SEM SINCRONIZAÇÃO (race condition) ===
+Pai depositou 200.0. Saldo: 1200.0
+Filho1 sacou 200.0. Saldo: 1000.0
+Filho2 sacou 200.0. Saldo: 600.0
+Filho3 sacou 200.0. Saldo: 400.0
+Filho4 sacou 200.0. Saldo: 800.0
+Pai depositou 200.0. Saldo: 600.0
+Pai depositou 200.0. Saldo: 800.0
+Pai depositou 200.0. Saldo: 1000.0
+Filho3 sacou 200.0. Saldo: 800.0
+Filho4 sacou 200.0. Saldo: 600.0
+Filho1 sacou 200.0. Saldo: 400.0
+Filho2 sacou 200.0. Saldo: 200.0
+Pai depositou 200.0. Saldo: 400.0
+Filho3 sacou 200.0. Saldo: 200.0
+Filho4 sacou 200.0. Saldo: 0.0
+Filho1 sacou 200.0. Saldo: -200.0
+Filho2 sacou 200.0. Saldo: -400.0
+Filho3 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho2 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho1 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho4 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho3 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho1 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho2 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho4 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Saldo final: -400.0
+Pai depositou 200.0. Saldo: 1200.0
+Filho1 sacou 200.0. Saldo: 1000.0
+Filho2 sacou 200.0. Saldo: 600.0
+Filho3 sacou 200.0. Saldo: 800.0
+Filho4 sacou 200.0. Saldo: 400.0
+Pai depositou 200.0. Saldo: 600.0
+Pai depositou 200.0. Saldo: 800.0
+Pai depositou 200.0. Saldo: 1000.0
+Filho1 sacou 200.0. Saldo: 800.0
+Filho2 sacou 200.0. Saldo: 600.0
+Filho3 sacou 200.0. Saldo: 400.0
+Filho4 sacou 200.0. Saldo: 200.0
+Pai depositou 200.0. Saldo: 400.0
+Filho1 sacou 200.0. Saldo: 200.0
+Filho2 sacou 200.0. Saldo: 0.0
+Filho4 sacou 200.0. Saldo: -200.0
+Filho3 sacou 200.0. Saldo: -400.0
+Filho1 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho4 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho2 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho3 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho4 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho1 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho2 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho3 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Saldo final: -400.0
+Pai depositou 200.0. Saldo: 1200.0
+Filho1 sacou 200.0. Saldo: 1000.0
+Filho3 sacou 200.0. Saldo: 600.0
+Filho2 sacou 200.0. Saldo: 800.0
+Filho4 sacou 200.0. Saldo: 400.0
+Pai depositou 200.0. Saldo: 600.0
+Pai depositou 200.0. Saldo: 800.0
+Pai depositou 200.0. Saldo: 1000.0
+Filho2 sacou 200.0. Saldo: 600.0
+Filho1 sacou 200.0. Saldo: 400.0
+Filho3 sacou 200.0. Saldo: 800.0
+Filho4 sacou 200.0. Saldo: 200.0
+Pai depositou 200.0. Saldo: 400.0
+Filho2 sacou 200.0. Saldo: 200.0
+Filho1 sacou 200.0. Saldo: 0.0
+Filho4 sacou 200.0. Saldo: -200.0
+Filho3 sacou 200.0. Saldo: -400.0
+Filho1 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho2 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho4 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho3 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho1 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho2 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho4 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Filho3 não pôde sacar 200.0. Saldo insuficiente: -400.0
+Saldo final: -400.0
+=== 2. SYNCHRONIZED ===
+Conta criada. Saldo inicial: R$ 1000.0
+Pai depositou 200.0 → saldo: 1200.0
+Filho-4 sacou 200.0 → saldo: 1000.0
+Filho-3 sacou 200.0 → saldo: 800.0
+Filho-2 sacou 200.0 → saldo: 600.0
+Filho-1 sacou 200.0 → saldo: 400.0
+Filho-2 sacou 200.0 → saldo: 200.0
+Filho-3 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-2 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-4 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-1 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-3 sacou 200.0 → saldo: 0.0
+Saldo final (synchronized): 0.0
+Conta criada. Saldo inicial: R$ 1000.0
+Pai depositou 200.0 → saldo: 1200.0
+Filho-4 sacou 200.0 → saldo: 1000.0
+Filho-2 sacou 200.0 → saldo: 800.0
+Filho-3 sacou 200.0 → saldo: 600.0
+Filho-1 sacou 200.0 → saldo: 400.0
+Filho-3 sacou 200.0 → saldo: 200.0
+Filho-2 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-3 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-2 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-1 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-4 sacou 200.0 → saldo: 0.0
+Saldo final (synchronized): 0.0
+Conta criada. Saldo inicial: R$ 1000.0
+Pai depositou 200.0 → saldo: 1200.0
+Filho-1 sacou 200.0 → saldo: 1000.0
+Filho-4 sacou 200.0 → saldo: 800.0
+Filho-3 sacou 200.0 → saldo: 600.0
+Filho-2 sacou 200.0 → saldo: 400.0
+Filho-3 sacou 200.0 → saldo: 200.0
+Filho-4 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-3 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-1 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-3 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-4 sacou 200.0 → saldo: 0.0
+Saldo final (synchronized): 0.0
+=== 3. REENTRANTLOCK ===
+Conta criada. Saldo inicial: R$ 1000.0
+Pai depositou 200.0 → saldo: 1200.0
+Filho-1 sacou 200.0 → saldo: 1000.0
+Filho-2 sacou 200.0 → saldo: 800.0
+Filho-3 sacou 200.0 → saldo: 600.0
+Filho-4 sacou 200.0 → saldo: 400.0
+Pai depositou 200.0 → saldo: 600.0
+Filho-1 sacou 200.0 → saldo: 400.0
+Filho-2 sacou 200.0 → saldo: 200.0
+Filho-3 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-1 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-1 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-4 sacou 200.0 → saldo: 0.0
+Saldo final (ReentrantLock): 0.0
+Conta criada. Saldo inicial: R$ 1000.0
+Pai depositou 200.0 → saldo: 1200.0
+Filho-1 sacou 200.0 → saldo: 1000.0
+Filho-2 sacou 200.0 → saldo: 800.0
+Filho-3 sacou 200.0 → saldo: 600.0
+Filho-4 sacou 200.0 → saldo: 400.0
+Pai depositou 200.0 → saldo: 600.0
+Filho-1 sacou 200.0 → saldo: 400.0
+Filho-2 sacou 200.0 → saldo: 200.0
+Filho-3 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-1 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-2 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-3 sacou 200.0 → saldo: 0.0
+Saldo final (ReentrantLock): 0.0
+Conta criada. Saldo inicial: R$ 1000.0
+Filho-1 sacou 200.0 → saldo: 800.0
+Filho-2 sacou 200.0 → saldo: 600.0
+Filho-3 sacou 200.0 → saldo: 400.0
+Pai depositou 200.0 → saldo: 600.0
+Filho-4 sacou 200.0 → saldo: 400.0
+Filho-1 sacou 200.0 → saldo: 200.0
+Filho-2 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-4 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-4 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-4 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-4 sacou 200.0 → saldo: 0.0
+Saldo final (ReentrantLock): 0.0
+=== 4. READWRITELOCK ===
+Conta criada. Saldo inicial: R$ 1000.0
+Pai depositou 200.0 → saldo: 1200.0
+Filho-1 sacou 200.0 → saldo: 1000.0
+Filho-2 sacou 200.0 → saldo: 800.0
+Filho-3 sacou 200.0 → saldo: 600.0
+Filho-4 sacou 200.0 → saldo: 400.0
+Pai depositou 200.0 → saldo: 600.0
+Filho-1 sacou 200.0 → saldo: 400.0
+Filho-2 sacou 200.0 → saldo: 200.0
+Filho-3 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-1 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-2 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-1 sacou 200.0 → saldo: 0.0
+Saldo final (ReadWriteLock): 0.0
+Conta criada. Saldo inicial: R$ 1000.0
+Pai depositou 200.0 → saldo: 1200.0
+Filho-2 sacou 200.0 → saldo: 1000.0
+Filho-3 sacou 200.0 → saldo: 800.0
+Filho-4 sacou 200.0 → saldo: 600.0
+Filho-1 sacou 200.0 → saldo: 400.0
+Pai depositou 200.0 → saldo: 600.0
+Filho-2 sacou 200.0 → saldo: 400.0
+Filho-3 sacou 200.0 → saldo: 200.0
+Filho-4 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-2 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-2 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-3 sacou 200.0 → saldo: 0.0
+Saldo final (ReadWriteLock): 0.0
+Conta criada. Saldo inicial: R$ 1000.0
+Pai depositou 200.0 → saldo: 1200.0
+Filho-1 sacou 200.0 → saldo: 1000.0
+Filho-2 sacou 200.0 → saldo: 800.0
+Filho-3 sacou 200.0 → saldo: 600.0
+Filho-4 sacou 200.0 → saldo: 400.0
+Pai depositou 200.0 → saldo: 600.0
+Filho-1 sacou 200.0 → saldo: 400.0
+Filho-2 sacou 200.0 → saldo: 200.0
+Filho-3 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-1 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-1 sacou 200.0 → saldo: 0.0
+Pai depositou 200.0 → saldo: 200.0
+Filho-1 sacou 200.0 → saldo: 0.0
+Saldo final (ReadWriteLock): 0.0
