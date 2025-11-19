@@ -4,16 +4,16 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Cliente implements Runnable {
-    private Banco banco;
+    private Conta conta;   // <--- mudamos de Banco para Conta
 
-    public Cliente(Banco banco) {
-        this.banco = banco;
+    public Cliente(Conta conta) {
+        this.conta = conta;
     }
 
     @Override
     public void run() {
         for (int i = 0; i < 5; i++) {
-            banco.sacar(200.0);
+            conta.sacar(200.0);
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
@@ -23,11 +23,12 @@ public class Cliente implements Runnable {
     }
 }
 
+// Classe Conta (agora com nome correto e construtor correto)
 class Conta {
     private double saldo;
-    private ReadWriteLock lock = new ReentrantReadWriteLock();
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
-    public Banco(double saldoInicial) {
+    public Conta(double saldoInicial) {
         this.saldo = saldoInicial;
         System.out.println("Conta criada. Saldo inicial: R$ " + saldo);
     }
