@@ -23,7 +23,7 @@ public class Cliente implements Runnable {
     }
 }
 
-class Banco {
+class Conta {
     private double saldo;
     private ReadWriteLock lock = new ReentrantReadWriteLock();
 
