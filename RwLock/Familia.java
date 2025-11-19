@@ -1,15 +1,121 @@
+package RwLock;
+
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Familia {
-    public static void main (String args[]) {
-        // Cria conta conjunta da família
-        final Conta conta = new Conta(100);
-        // Cria familiares e lhes informa a conta conjunta
-        Cliente pai = new Cliente("Pai ", conta);
-        Cliente mae = new Cliente("Mãe ", conta);
-        Cliente filho = new Cliente("Filho ", conta);
-        // Inicia as threads
-       filho.start();
+    public static void main(String[] args) {
+        Conta conta = new Conta(1000.0);
+
+        Thread pai = new Thread(new Pai(conta), "Pai");
+        Thread filho1 = new Thread(new Filho(conta), "Filho1");
+        Thread filho2 = new Thread(new Filho(conta), "Filho2");
+        Thread filho3 = new Thread(new Filho(conta), "Filho3");
+        Thread filho4 = new Thread(new Filho(conta), "Filho4");
+
         pai.start();
-        mae.start();
+        filho1.start();
+        filho2.start();
+        filho3.start();
+        filho4.start();
+
+        try {
+            pai.join();
+            filho1.join();
+            filho2.join();
+            filho3.join();
+            filho4.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        System.out.println("Saldo final: " + conta.getSaldo());
+    }
+}
+
+class Conta {
+    private double saldo;
+    private ReadWriteLock lock = new ReentrantReadWriteLock();
+
+    public Conta(double saldoInicial) {
+        this.saldo = saldoInicial;
+    }
+
+    public void depositar(double valor) {
+        lock.writeLock().lock();
+        try {
+            saldo += valor;
+            System.out.println(Thread.currentThread().getName() + " depositou " + valor + ". Saldo: " + saldo);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    public void sacar(double valor) {
+        lock.writeLock().lock();
+        try {
+            if (saldo >= valor) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                saldo -= valor;
+                System.out.println(Thread.currentThread().getName() + " sacou " + valor + ". Saldo: " + saldo);
+            } else {
+                System.out.println(Thread.currentThread().getName() + " não pôde sacar " + valor + ". Saldo insuficiente: " + saldo);
+            }
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    public double getSaldo() {
+        lock.readLock().lock();
+        try {
+            return saldo;
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+}
+
+class Pai implements Runnable {
+    private Conta conta;
+
+    public Pai(Conta conta) {
+        this.conta = conta;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 5; i++) {
+            conta.depositar(200.0);
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+}
+
+class Filho implements Runnable {
+    private Conta conta;
+
+    public Filho(Conta conta) {
+        this.conta = conta;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 5; i++) {
+            conta.sacar(200.0);
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 }
