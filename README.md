@@ -24,18 +24,6 @@ Foram implementadas e comparadas 4 versões:
 | `Lock`        | `ReentrantLock`           | Sempre correto (saldo = 1000)              |
 | `RwLock`      | `ReadWriteLock`           | Sempre correto (saldo = 1000)              |
 
----
-
-## Resultados das Execuções (3 rodadas de cada versão)
-
-| Estratégia               | Execução 1 | Execução 2 | Execução 3 | Consistente? | Observação                              |
-|--------------------------|------------|------------|------------|--------------|-----------------------------------------|
-| Concorrente (sem sync)   | 800        | 900        | 700        | Não          | Race condition clara                    |
-| Synk (synchronized)      | 1000       | 1000       | 1000       | Sim          | Totalmente consistente                  |
-| Lock (ReentrantLock)     | 1000       | 1000       | 1000       | Sim          | Correto (unlock sempre no finally)      |
-| RwLock (ReadWriteLock)   | 1000       | 1000       | 1000       | Sim          | Correto e mais eficiente em leituras    |
-
-*Log completo com todas as saídas está no arquivo `log-execucoes.txt`*
 
 ---
 
