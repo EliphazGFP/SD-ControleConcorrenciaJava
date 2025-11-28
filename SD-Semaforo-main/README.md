@@ -1,36 +1,40 @@
-# Semáforos
-Permite controlar o número de acessos simultâneos a um dado ou recurso
+# SD-ControleConcorrenciaJava
 
-## Métodos da classe Semaphore
-* Semaphore(int acessos [, boolean ordem]): construtor; parâmetros definem o número de acessos simultâneos possíveis e se a ordem de liberação de threads em espera será FIFO
-* acquire(): solicita acesso a um dado ou recurso, entrando em espera se todos os direitos de acesso estiverem sendo usados
-* release(): libera um direito de acesso
+Atividade prática: Controle de Concorrência com Semáforo vs Lock  
+Disciplina: Sistemas Distribuídos - IFPR
 
-![image](https://github.com/user-attachments/assets/0f5e955c-dbbf-4c5d-a9bb-e148dba65800)
+## Objetivo
+Comparar duas formas de controlar acesso concorrente a um recurso compartilhado (ponte estreita com limite de 3 carros):
 
-# Concorrência na API Java
-Algumas classes da API Java controlam a concorrência internamente  thread safe. Ex.: Vector, Hashtable, ...
-Outras classes não fazem o controle são thread unsafe, ou seja, não garantem a sua consistência se usadas por várias threads. Estas classes são em geral mais rápidas, pois controle de concorrência reduz o desempenho. Classes thread unsafe devem ser protegidas se forem usadas por mais de uma thread. Ex.: componentes do Swing, LinkedList, ...
-Para evitar acesso concorrente a classes thread unsafe, podemos criar novas classes protegidas que as encapsulem
+- `Carro.java` → Usa `java.util.concurrent.Semaphore`
+- `CarroLock.java` → Usa `ReentrantLock` + `Condition` (versão correta com limite)
 
-```java
-public class SynchronizedLinkedList {
-  LinkedList lista = new LinkedList();
-  public synchronized void add(Object o) {
-    lista.add(o);
-  }
+## Análise e Comparação
 
-  public synchronized Object get(int index) {
-    return lista.get(index);
-    }
-    // idem para os demais métodos de LinkedList
-}
-```
+| Critério                    | Semaphore                              | ReentrantLock + Condition                     |
+|-----------------------------|----------------------------------------|------------------------------------------------|
+| Facilidade de uso           | Muito simples (ideal para limite fixo) | Mais verboso, exige mais cuidado              |
+| Limite de acesso            | Nativo (construtor define o limite)    | Precisa de contador manual + Condition        |
+| Ordem de atendimento       | Pode ser FIFO (`new Semaphore(n, true)`) | Com `fair = true` também garante ordem       |
+| Try-lock / timeout          | Tem `tryAcquire()`, `acquireUninterruptibly()` | Tem `tryLock()`, muito mais flexível         |
+| Performance                 | Excelente                              | Um pouco mais lento (mais funcionalidades)   |
+| Quando usar                 | Controle de pool (DB, threads, conexões) | Quando precisa de lógica complexa de espera   |
 
-# Atividade Prática
-* Utilizar o repositório com o nome: SD-ControleConcorrenciaJava;
-* Baixar e realizar o upload dos arquivos do repositório:  SD-Semaforo;
-* Compilar os dois programas .java;
-* Executar os dois programas gerando uma log, se executado mais de uma vez não pode sobrescrever;
-* Realize o Commit de todos os arquivos para o seu  reportório SD-ControleConcorrenciaJava  juntamente com os prints de todas as execuções;
-* Realizar as analises de comparação do código do programa Carro.java e CarroLock.java e incluir o texto da análise no README.md do seu repositório D-ControleConcorrenciaJava. 
+**Conclusão:**
+- Para problemas simples como "máximo N threads acessando um recurso", **Semaphore é a escolha ideal**: código limpo, seguro e performático.
+- Para cenários avançados (tempo limite, cancelamento, múltiplas condições), **Lock + Condition** é mais poderoso.
+
+**Resultado observado na execução:**
+- Ambos os programas garantem que nunca passem mais de 3 carros ao mesmo tempo.
+- Com `fair = true`, a ordem de chegada é respeitada.
+- O Semaphore produz código mais legível e menos propenso a erros.
+
+## Como executar
+
+```bash
+javac Carro.java
+javac CarroLock.java
+
+# Executar com log (não sobrescreve)
+java Carro > Carro_$(date +%Y%m%d_%H%M%S).log &
+java CarroLock > CarroLock_$(date +%Y%m%d_%H%M%S).log &
